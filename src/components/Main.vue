@@ -17,6 +17,5 @@ export default {
 
 <style scoped>
   .main{
-    background-color: darkgoldenrod;
   }
 </style>

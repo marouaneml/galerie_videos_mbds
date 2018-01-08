@@ -1,6 +1,14 @@
 <template>
   <div class="">
-    {{msg}}
+    <h2>Titre de la vidéo</h2>
+    <div id="video-wrapper">
+        <div id="video-bar">
+            <div id="video-controls">
+
+            </div>
+            
+        </div>
+    </div>
   </div>
 </template>
 
@@ -16,5 +24,7 @@ export default {
 </script>
 
 <style scoped>
-
+.video-wrapper{
+    background-color: blueviolet;
+}
 </style>
