@@ -1,12 +1,27 @@
 <template>
   <div id="app">
-    <div id="bg"></div>
+    
+      <div id="header">
+        <div id="logo"><router-link to="/">MBDS Gallery</router-link></div> 
+        <div id="serach-input">
+          <input placeholder="Chercher une vidéo ..." type="text" v-model="searchInput" />
+        </div>
+        <nav id="menu">
+          <input type="checkbox">
+          <div id="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <ul>
+            <li><router-link to="/nouvelle-video">Nouvelle vidéo</router-link></li>
+            <li><router-link to="/show">Détails</router-link></li>
+          </ul>
+        </nav>
+        
+      </div>
+
     <div class="content">
-      <span id="logo"><router-link to="/"><img src="./assets/logo.png" alt="logo"></router-link> </span> 
-      <ul>
-        <li><router-link to="/nouvelle-video">Nouvelle vidéo</router-link></li>
-        <li><router-link to="/show">Détails</router-link></li>
-      </ul>
       <transition name="fade">
         <router-view></router-view>
       </transition>
@@ -17,63 +32,188 @@
 
 <script>
 export default {
-  name: "app"
+  name: "app",
+  data() {
+    return {
+      searchInput: ""
+    };
+  }
 };
 </script>
 
 <style>
 @import url(./assets/css_reset.css);
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab");
 .fade-enter-active,
 .fade-leave-active {
   transition-property: opacity;
-  transition-duration: 0.1s;
+  transition-duration: 0.2s;
 }
 
 .fade-enter-active {
-  transition-delay: 0.1s;
+  transition-delay: 0.2s;
 }
 
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
 }
+
 #app {
-  background-color: #952a3e;
-  padding: 0 20px;
   height: 100%;
 }
+
 html,
 body {
   height: 100%;
+  font-family: "Open Sans", sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  background: #f2f1f0;
 }
-.content{
-  position: absolute;
-  top:0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+
+h1,
+h2,
+h3 {
+  font-family: "Roboto Slab", serif;
+}
+
+a,
+a:visited {
+  color: #b9cb43;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.content {
   margin: auto;
-  width: 90%;
-  height: 450px;
-  background: #FAFAFA;
-  border-radius: 8px;
-  padding: 10px;
+  padding: 20px 0;
+  max-width: 84%;
 }
-#bg {
+#menu-icon{
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 5px 0 5px;
+  width: 30px;
+  
+}
+#menu{
+  float: right;
+  position: relative;
+  margin-top: -27px;  
+}
+#menu ul {
+  position: absolute;
+  top: 40px;
+  min-width: 120px;
+  right: 0px;
+  padding: 0 10px;
+  background-color: rgba(0, 0,0, 0.51);;
+  display: none;
+}
+#menu input:checked + #menu-icon + ul{
   display: block;
-  width: 30%;
-  height: 100%;
-  border-left: 100% solid;
-  background: linear-gradient(98deg, transparent, transparent, transparent 40%, #F3CF6E 40%);
-  position: absolute;
-  right: 0;
-  top: 0;
 }
-#logo{
+#menu ul>li {
+  font-size: 13px;
+  margin: 5px 0;
+}
+#menu ul>li>a{
+  color: #efeff1; 
+}
+#menu input, #menu-icon{
   position: absolute;
-  height: 40px;
-  top: -45px;
-}#logo img{
+  right:0;
+
+}
+#menu input{
+  z-index: 2;
+  opacity: 0;
+  position: absolute;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+}
+#menu input:hover + #menu-icon span, #menu input:checked + #menu-icon span{
+  border-color: #b9cb43;
+}
+
+#menu-icon span{
+  display: block;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 3px;
+}
+
+#menu-icon span:last-child{
+  margin-bottom: 5px;
+}
+
+#header {
+  background-color: #fff;
+  border-top: 1px solid #b9cb43;
+  position: relative;
+  padding: 20px 8%;
+  border-bottom: 3px solid #efeff1;
+}
+#logo {
+  position: absolute;
+  font-weight: bolder;
+  font-size: 20px;
+}
+#logo a {
+  color: #9e9e9e;
+}
+#logo a:hover{
+  text-decoration: none;
+}
+#logo img {
   height: 100%;
+  display: block;
+}
+
+#serach-input {
+  padding-left: 140px;
+  padding-right: 40px;
+}
+#serach-input input {
+  border: 0;
+  border-radius: 5px;
+  background-color: #f2f1f0;
+  padding-left: 10px;
+  color: #9e9e9e;
+}
+/* Style general */
+input {
+  border: none;
+  border-bottom: 2px solid #b93852;
+  width: 100%;
+  outline: none;
+}
+
+input[type="text"] {
+  padding: 5px 0;
+}
+
+input[type="text"],
+button {
+  font-size: 15px;
+  font-family: "Open Sans", sans-serif;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+button {
+  background-color: #952a3e;
+  color: #fafafa;
+  border: none;
+  padding: 5px 10px;
+  font-size: 15px;
+  font-family: "Open Sans", sans-serif;
 }
 </style>
+

@@ -6,6 +6,7 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+Vue.component('VideoItem', require('./components/VideoItem.vue'));
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
