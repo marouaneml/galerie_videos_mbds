@@ -1,6 +1,8 @@
 <template>
+<router-link :to="{ name: 'details', params: { id: id }}">
   <div class="wrap">
     <div class="video-item">
+      <span @click.prevent= "deleteMe(id)">delete</span>
       <div class="thumb">
         <img :src="thumb" :alt="title">
       </div>
@@ -8,20 +10,24 @@
       <p>{{desc}}</p>
       <hr>
       <div class="vote">
-        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=5? true:false)}" @click="check(5)"></span>
-        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=4? true:false)}" @click="check(4)"></span>
-        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=3? true:false)}" @click="check(3)"></span>
-        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=2? true:false)}" @click="check(2)"></span>
-        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=1? true:false)}" @click="check(1)"></span>
+        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=5? true:false)}" @click.prevent= "check(5)"></span>
+        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=4? true:false)}" @click.prevent="check(4)"></span>
+        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=3? true:false)}" @click.prevent="check(3)"></span>
+        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=2? true:false)}" @click.prevent="check(2)"></span>
+        <span :class="{ checkbox: true, checked: checked, active: (this.vote>=1? true:false)}" @click.prevent="check(1)"></span>
       </div>
     </div>
   </div>
+
+</router-link>
+  
   
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "VideoItem",
-  props: ["title", "voteProp", "thumb", "desc"],
+  props: ["title", "voteProp", "thumb", "desc", "id"],
   data() {
     return {
       checked: false,
@@ -32,22 +38,47 @@ export default {
     check(val) {
       this.vote = val;
       this.checked = !this.checked;
+    },
+    deleteMe(id) {
+      axios.delete("http://localhost:8085/api/video?id=" + id).then(
+        response => {
+          if(response.data == 0){
+            alert('Plus de video à supprimé!')
+          }else{
+            alert('Video supprimé avec succès!')
+          }
+          
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 };
 </script>
 
 <style scoped>
+.wrap {
+  width: 33.33333333%;
+  display: inline-block;
+  vertical-align: top;
+}
 .video-item {
   border: 1px solid #ebebeb;
   background-color: #ffffff;
   border-radius: 4px;
   padding: 15px;
   overflow: hidden;
-  display: inline-block;
+
+  margin: 5px;
+  /*break-before: verso;
   -moz-column-break-before: always;
-  -webkit-column-break-before: always;
-  margin: 3px 0;
+  -webkit-column-break-before: always;*/
+}
+.video-item:hover {
+  border: 1px solid #ffed53;
+  cursor: pointer;
 }
 hr {
   margin: 10px -15px;

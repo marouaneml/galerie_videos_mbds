@@ -19,9 +19,21 @@ export default new Router({
       component: New
     },
     {
-      path: '/show',
-      name: 'Show',
+      path: '/details/:id',
+      name: 'details',
       component: Show
+    },
+    {
+      path: '/search-results/:from/:to',
+      
+      component: Main
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: {
+        template: '<p>Page Not Found</p>'
+      }
     }
   ]
 })

@@ -15,7 +15,6 @@
           </div>
           <ul>
             <li><router-link to="/nouvelle-video">Nouvelle vidéo</router-link></li>
-            <li><router-link to="/show">Détails</router-link></li>
           </ul>
         </nav>
         
@@ -91,6 +90,13 @@ a:hover {
   margin: auto;
   padding: 20px 0;
   max-width: 84%;
+}
+.view-title{
+    padding: 5px;
+    font-size: 25px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
 }
 #menu-icon{
   border: 1px solid #ddd;
@@ -185,17 +191,16 @@ a:hover {
   color: #9e9e9e;
 }
 /* Style general */
-input {
+input[type="text"]{
   border: none;
-  border-bottom: 2px solid #b93852;
+  border-bottom: 2px solid #e1e2db;
   width: 100%;
   outline: none;
-}
-
-input[type="text"] {
   padding: 5px 0;
 }
-
+input[type="text"]:focus{
+  border-bottom: 2px solid #b9cb43;
+}
 input[type="text"],
 button {
   font-size: 15px;
@@ -208,7 +213,7 @@ label {
 }
 
 button {
-  background-color: #952a3e;
+  background-color: #b9cb43;
   color: #fafafa;
   border: none;
   padding: 5px 10px;
