@@ -3,16 +3,16 @@
     <h2 class="view-title">Ajouter une vidéo</h2>
     <form enctype="multipart/form-data">
         <label>
-            Url: {{videoUrl}}
-            <input type="text" ref="url" v-model="videoUrl" />
-        </label>
-        <label>
-            Description:
-            <input type="text" ref="desc" />
+            Url:
+            <input type="text" placeholder="https://www" ref="url" v-model="videoUrl" />
         </label>
         <label>
             Légende :
             <input type="text" ref="legende" />
+        </label>
+        <label>
+            Description:
+            <textarea type="text" ref="desc" ></textarea>
         </label>
         <button type="submit" :disabled="this.sent" @click.prevent="getFormValues()">Valider</button>
         <button @click="resetForm()">Annuler</button>
@@ -28,15 +28,15 @@ export default {
     return {
       sent: false,
       videoUrl: "",
-      videoData: {}
+      videoData: null
     };
   },
   watch: {
     videoUrl: function(newVal, oldVal) {
-      var videoid = newVal;
-      var matches =
-        videoid.match(/^http:\/\/www\.youtube\.com\/.*[?&]v=([^&]+)/i) ||
-        videoid.match(/^http:\/\/youtu\.be\/([^?]+)/i);
+      var videoid = newVal.trim();
+      var matches = videoid.match(
+        /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
+      );
       if (matches) {
         videoid = matches[1];
         console.log("Recuperation des infos de la video ..");
@@ -50,10 +50,24 @@ export default {
           })
           .then(
             response => {
-              this.videoData = {data: response.data.items[0].snippet}
+              if (response.data.items.length > 0) {
+                let data = response.data.items[0].snippet;
+                this.videoData = {
+                  url: videoid,
+                  desc: data.description,
+                  legende: data.title,
+                  poster: data.thumbnails.standard.url,
+                  votes: []
+                };
+                this.$refs.desc.value = data.description;
+                this.$refs.legende.value = data.title;
+              }
+              else{
+                console.log("Video n'existe pas!")
+              }
             },
             error => {
-              console.log(error);
+              this.videoData = null;
             }
           );
       } else if (videoid.match(/^[a-z0-9_-]{11}$/i) === null) {
@@ -69,7 +83,6 @@ export default {
         url: this.$refs.url.value,
         desc: this.$refs.desc.value,
         legende: this.$refs.legende.value,
-        poster: this.videoData.poster,
         votes: []
       };
       let videoValues = Object.values(video);
@@ -81,24 +94,29 @@ export default {
           break;
         }
       }
-      if (ok) {
+      if (ok && this.videoData != null) {
         axios
-          .post("http://localhost:8085/api/video/save", video)
+          .post("http://localhost:8085/api/video/save", this.videoData)
           .then(response => {
             if (response.data.succes == true && response.status == 200) {
               alert("Video Ajouter avec succès!\nVous Voulez creer une autre?");
               this.resetForm();
-              this.sent = false;
             }
           })
-          .catch(error => Promise.reject(error));
+          .catch(error => { 
+            //Promise.reject(error);
+            console.log("Sauvgarde echouée!")
+          });
+        this.sent = false;
       }
     },
     resetForm: function() {
       this.$refs.url.value = "";
       this.$refs.desc.value = "";
       this.$refs.legende.value = "";
-      this.$refs.poster.value = "";
+      this.sent = false;
+      this.videoData = null;
+      return;
     }
   }
 };

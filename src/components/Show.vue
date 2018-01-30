@@ -1,12 +1,12 @@
 <template>
   <div class="show-content">
-    <h2 class="view-title">{{'Video.title'}} </h2>
+    <h2 class="view-title">{{video.legende}} </h2>
 
     <div id="video-wrapper">
-      <iframe :src="/*video.url*/'https://www.youtube.com/embed/uYaPF5wZNEo?modestbranding=1&autohide=1&showinfo=0'" frameborder="0" allowfullscreen></iframe>
+      <iframe :src="'https://www.youtube.com/embed/'+video.url+'?modestbranding=1&autohide=1&showinfo=0'" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <p class="desc">{{video.title}} </p>
+    <p class="desc">{{video.desc}} </p>
 
     <div class="comments">
       <ul>
@@ -28,7 +28,7 @@ export default {
   methods: {
     getDetail: function() {
       let id = this.$route.params.id;
-      axios.get("https://jsonplaceholder.typicode.com/photos/" + this.$route.params.id).then(
+      axios.get("http://localhost:8085/api/video?id=" + this.$route.params.id).then(
         response => {
           this.video = response.data;
         },

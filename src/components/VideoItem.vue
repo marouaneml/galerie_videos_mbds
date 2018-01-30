@@ -2,12 +2,12 @@
 <router-link :to="{ name: 'details', params: { id: id }}">
   <div class="wrap">
     <div class="video-item">
-      <span @click.prevent= "deleteMe(id)">delete</span>
+      <span @click.prevent= "deleteMe(id)">Supprimer</span>
       <div class="thumb">
         <img :src="thumb" :alt="title">
       </div>
-      <div class="title">{{title}}</div>
-      <p>{{desc}}</p>
+      <div class="title">{{title.slice(0, 50) +" ..."}}</div>
+      <p>{{desc.slice(0, 100) + " ..."}}</p>
       <hr>
       <div class="vote">
         <span :class="{ checkbox: true, checked: checked, active: (this.vote>=5? true:false)}" @click.prevent= "check(5)"></span>
@@ -74,6 +74,7 @@ export default {
             alert("Plus de video à supprimé!");
           } else {
             alert("Video supprimé avec succès!");
+            this.$emit('delete-evt', this.id);
           }
         },
         error => {
@@ -97,14 +98,25 @@ export default {
   border-radius: 4px;
   padding: 15px;
   overflow: hidden;
-
+  position: relative;
   margin: 5px;
   /*break-before: verso;
   -moz-column-break-before: always;
   -webkit-column-break-before: always;*/
 }
+.video-item>span{
+      position: absolute;
+    background: #fafafa;
+    right: 5px;
+    top: 5px;
+    padding: 3px 5px;
+    font-size: 13px;
+    color: #F44336;
+    display: block;
+    border-radius: 5px;
+}
 .video-item:hover {
-  border: 1px solid #ffed53;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 hr {

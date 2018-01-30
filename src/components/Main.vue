@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <video-item v-for="v in videos.slice(0, this.count)" v-bind:key="v.id" :id="v.id" voteProp ="3" v-bind:thumb="v.url" v-bind:title="'Titile i'" v-bind:desc="v.title"></video-item>
+    <video-item @delete-evt="handleDelete(v._id)" v-for="v in videos.slice(0, this.count)" v-bind:key="v._id" :id="v._id" voteProp ="3" v-bind:thumb="v.poster" v-bind:title="v.legende" v-bind:desc="v.desc"></video-item>
+    <p v-if="videos.length == 0">Pas de videos! Vérifiez le serveur nodeJs.</p>
   </div>
   
 </template>
@@ -31,24 +32,22 @@ export default {
   },
   methods: {
     handleScroll: function(event) {
-      if(scrollY / (document.body.scrollHeight-document.body.offsetHeight) == 1){
+      if (
+        scrollY / (document.body.scrollHeight - document.body.offsetHeight) ==
+        1
+      ) {
         this.count += 3;
-
       }
     },
+    handleDelete: function(id) {
+      let i = this.videos.map(item => item._id).indexOf(id)
+      this.videos.splice(i, 1)
+    },
     getVideos: function() {
-      axios.get("https://jsonplaceholder.typicode.com/photos").then(
-        response => {
-          this.videos = response.data;
-        },
-        error => {
-          console.log(error);
-        }
-      );
-
       axios.get("http://localhost:8085/api/video/all").then(
         response => {
-          console.log(response);
+          this.videos = response.data;
+          console.log(this.videos);
         },
         error => {
           console.log(error);

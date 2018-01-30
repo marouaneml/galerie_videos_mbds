@@ -191,17 +191,23 @@ a:hover {
   color: #9e9e9e;
 }
 /* Style general */
-input[type="text"]{
+input[type="text"], textarea{
   border: none;
   border-bottom: 2px solid #e1e2db;
   width: 100%;
   outline: none;
   padding: 5px 0;
 }
-input[type="text"]:focus{
+input[type="text"]:focus, textarea:focus{
   border-bottom: 2px solid #b9cb43;
 }
+textarea{
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 200px;
+}
 input[type="text"],
+textarea,
 button {
   font-size: 15px;
   font-family: "Open Sans", sans-serif;

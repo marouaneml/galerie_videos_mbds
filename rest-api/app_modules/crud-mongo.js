@@ -2,7 +2,6 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
 var url = 'mongodb://localhost:27017/test';
-var fs = require('fs');
 
 exports.connexionMongo = function (callback) {
 	MongoClient.connect(url, function (err, db) {
@@ -32,7 +31,6 @@ exports.createVideo = function (formData, callback) {
 	MongoClient.connect(url, function (err, db) {
 		if (!err) {
 			let toInsert = formData.body;
-			toInsert.poster = fs.readFileSync('C:\\Users\\MAROUANE\\Downloads\\streamSimpleSensor.png')
 			db.collection("videos_mbds")
 				.insertOne(toInsert, function (err, result) {
 					let reponse;
