@@ -3,8 +3,8 @@
     <h2 class="view-title">Ajouter une vidéo</h2>
     <form enctype="multipart/form-data">
         <label>
-            Url:
-            <input type="text" ref="url" />
+            Url: {{videoUrl}}
+            <input type="text" ref="url" v-model="videoUrl" />
         </label>
         <label>
             Description:
@@ -13,10 +13,6 @@
         <label>
             Légende :
             <input type="text" ref="legende" />
-        </label>
-        <label>
-            Légende :
-            <input type="file" ref="poster" accept="image/*" name="singleInputFileName"/>
         </label>
         <button type="submit" :disabled="this.sent" @click.prevent="getFormValues()">Valider</button>
         <button @click="resetForm()">Annuler</button>
@@ -30,11 +26,41 @@ export default {
   name: "New",
   data() {
     return {
-      sent: false
+      sent: false,
+      videoUrl: "",
+      videoData: {}
     };
   },
-  watch:{
-    
+  watch: {
+    videoUrl: function(newVal, oldVal) {
+      var videoid = newVal;
+      var matches =
+        videoid.match(/^http:\/\/www\.youtube\.com\/.*[?&]v=([^&]+)/i) ||
+        videoid.match(/^http:\/\/youtu\.be\/([^?]+)/i);
+      if (matches) {
+        videoid = matches[1];
+        console.log("Recuperation des infos de la video ..");
+        axios
+          .get("https://www.googleapis.com/youtube/v3/videos", {
+            params: {
+              key: "AIzaSyBGyiApGXIvj2c0MaSSb0n5yAAZWIyInmU",
+              part: "snippet,statistics",
+              id: videoid
+            }
+          })
+          .then(
+            response => {
+              this.videoData = {data: response.data.items[0].snippet}
+            },
+            error => {
+              console.log(error);
+            }
+          );
+      } else if (videoid.match(/^[a-z0-9_-]{11}$/i) === null) {
+        console.log("C'est pas une url youtube!");
+        return;
+      }
+    }
   },
   methods: {
     getFormValues: function() {
@@ -43,13 +69,8 @@ export default {
         url: this.$refs.url.value,
         desc: this.$refs.desc.value,
         legende: this.$refs.legende.value,
-        poster: this.$refs.poster.value,
-        votes: [
-          {
-            id: 8898,
-            vote: 0
-          }
-        ]
+        poster: this.videoData.poster,
+        votes: []
       };
       let videoValues = Object.values(video);
       let ok = true;
@@ -66,7 +87,7 @@ export default {
           .then(response => {
             if (response.data.succes == true && response.status == 200) {
               alert("Video Ajouter avec succès!\nVous Voulez creer une autre?");
-              this.resetForm()
+              this.resetForm();
               this.sent = false;
             }
           })

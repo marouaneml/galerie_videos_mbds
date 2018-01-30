@@ -39,16 +39,42 @@ export default {
     check(val) {
       this.vote = val;
       this.checked = !this.checked;
+
+      if (this.getCookie("mbds-gallery-user-cookie") != null) {
+        console.log(this.getCookie("mbds-gallery-user-cookie"));
+      } else {
+        // generer une clé
+        this.setCookie("mbds-gallery-user-cookie", "yyyyyy", 365);
+        // envoyer la clé à mongodb
+        
+      }
+    },
+    setCookie: function(name, value, days) {
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        var expires = "; expires=" + date.toGMTString();
+      } else var expires = "";
+      document.cookie = name + "=" + value + expires + "; path=/";
+    },
+    getCookie: function(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == " ") c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
     },
     deleteMe(id) {
       axios.delete("http://localhost:8085/api/video?id=" + id).then(
         response => {
-          if(response.data == 0){
-            alert('Plus de video à supprimé!')
-          }else{
-            alert('Video supprimé avec succès!')
+          if (response.data == 0) {
+            alert("Plus de video à supprimé!");
+          } else {
+            alert("Video supprimé avec succès!");
           }
-          
         },
         error => {
           console.log(error);
