@@ -1,7 +1,7 @@
 <template>
   <div class="new-video">
     <h2 class="view-title">Ajouter une vidéo</h2>
-    <form>
+    <form enctype="multipart/form-data">
         <label>
             Url:
             <input type="text" ref="url" />
@@ -16,7 +16,7 @@
         </label>
         <label>
             Légende :
-            <input type="file" ref="poster" accept="image/*"/>
+            <input type="file" ref="poster" accept="image/*" name="singleInputFileName"/>
         </label>
         <button type="submit" :disabled="this.sent" @click.prevent="getFormValues()">Valider</button>
         <button @click="resetForm()">Annuler</button>
@@ -33,6 +33,9 @@ export default {
       sent: false
     };
   },
+  watch:{
+    
+  },
   methods: {
     getFormValues: function() {
       this.sent = true;
@@ -41,7 +44,12 @@ export default {
         desc: this.$refs.desc.value,
         legende: this.$refs.legende.value,
         poster: this.$refs.poster.value,
-        vote: 0
+        votes: [
+          {
+            id: 8898,
+            vote: 0
+          }
+        ]
       };
       let videoValues = Object.values(video);
       let ok = true;

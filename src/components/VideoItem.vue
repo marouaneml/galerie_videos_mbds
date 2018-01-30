@@ -25,6 +25,7 @@
 </template>
 <script>
 import axios from "axios";
+
 export default {
   name: "VideoItem",
   props: ["title", "voteProp", "thumb", "desc", "id"],

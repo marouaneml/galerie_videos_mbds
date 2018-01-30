@@ -3,7 +3,6 @@ const app = express();
 const port = process.env.PORT || 8085;
 const server = require('http').Server(app);
 var multer = require('multer');
-var multerData = multer();
 
 const mongoDBModule = require('./app_modules/crud-mongo');
 
@@ -11,6 +10,8 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(multer({dest:'./uploads/'}).single('singleInputFileName'));
 
 server.listen(port);
 
@@ -67,7 +68,7 @@ app.get('/api/video/all', (req, res) => {
     });
 })
 app.post('/api/video/save', (req, res) => {
-    mongoDBModule.createVideo(req.body, function (data) {
+    mongoDBModule.createVideo(req, function (data) {
         res.send(JSON.stringify(data))
     })
 })
