@@ -9,6 +9,16 @@ exports.connexionMongo = function (callback) {
 		callback(err, db);
 	});
 }
+exports.searchVideo = function (str, callback) {
+	MongoClient.connect(url, function (err, db) {
+		if (!err) {
+			db.collection('videos_mbds').find({ legende: { '$regex': str, '$options': 'i' } }).toArray()
+				.then(arr => callback(arr));
+		} else {
+			callback(-1);
+		}
+	});
+}
 
 exports.findAllVideos = function (page, pagesize, callback) {
 	MongoClient.connect(url, function (err, db) {
@@ -94,7 +104,7 @@ exports.deleteVideo = function (id, callback) {
 	MongoClient.connect(url, function (err, db) {
 
 		if (!err) {
-			
+
 			db.collection('videos_mbds')
 				.remove({ '_id': ObjectId(id) }, function (err, obj) {
 					if (err) throw err;

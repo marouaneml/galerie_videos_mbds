@@ -86,6 +86,19 @@ app.get('/api/video', (req, res) => {
     })
 })
 
+app.get('/api/video/search', (req, res) => {
+    let str = req.query.like;
+    mongoDBModule.searchVideo(str, function (data) {
+        if (data != -1) {
+            res.send(JSON.stringify(data))
+        }
+        else {
+            res.send('Pas de vidéo qui ressemble à : ' + str)
+        }
+
+    })
+})
+
 app.delete('/api/video', (req, res) => {
     let id = req.query.id;
     mongoDBModule.deleteVideo(id, function (data) {

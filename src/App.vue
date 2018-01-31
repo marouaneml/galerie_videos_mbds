@@ -4,7 +4,7 @@
       <div id="header">
         <div id="logo"><router-link to="/">MBDS Gallery</router-link></div> 
         <div id="serach-input">
-          <input placeholder="Chercher une vidéo ..." type="text" v-model="searchInput" />
+          <input @keyup.enter="search()" placeholder="Chercher une vidéo ..." type="text" v-model="searchInput" />
         </div>
         <nav id="menu">
           <input type="checkbox">
@@ -36,6 +36,13 @@ export default {
     return {
       searchInput: ""
     };
+  },
+  methods: {
+    search: function() {
+      if (this.searchInput.trim() != "") {
+        this.$router.app.$emit("search-event", this.searchInput);
+      }
+    }
   }
 };
 </script>
@@ -91,24 +98,23 @@ a:hover {
   padding: 20px 0;
   max-width: 84%;
 }
-.view-title{
-    padding: 5px;
-    font-size: 25px;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
+.view-title {
+  padding: 5px;
+  font-size: 25px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
 }
-#menu-icon{
+#menu-icon {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 5px 5px 0 5px;
   width: 30px;
-  
 }
-#menu{
+#menu {
   float: right;
   position: relative;
-  margin-top: -27px;  
+  margin-top: -27px;
 }
 #menu ul {
   position: absolute;
@@ -116,25 +122,25 @@ a:hover {
   min-width: 120px;
   right: 0px;
   padding: 0 10px;
-  background-color: rgba(0, 0,0, 0.51);;
+  background-color: rgba(0, 0, 0, 0.51);
   display: none;
 }
-#menu input:checked + #menu-icon + ul{
+#menu input:checked + #menu-icon + ul {
   display: block;
 }
-#menu ul>li {
+#menu ul > li {
   font-size: 13px;
   margin: 5px 0;
 }
-#menu ul>li>a{
-  color: #efeff1; 
+#menu ul > li > a {
+  color: #efeff1;
 }
-#menu input, #menu-icon{
+#menu input,
+#menu-icon {
   position: absolute;
-  right:0;
-
+  right: 0;
 }
-#menu input{
+#menu input {
   z-index: 2;
   opacity: 0;
   position: absolute;
@@ -142,17 +148,18 @@ a:hover {
   height: 25px;
   cursor: pointer;
 }
-#menu input:hover + #menu-icon span, #menu input:checked + #menu-icon span{
+#menu input:hover + #menu-icon span,
+#menu input:checked + #menu-icon span {
   border-color: #b9cb43;
 }
 
-#menu-icon span{
+#menu-icon span {
   display: block;
   border-bottom: 2px solid #ddd;
   margin-bottom: 3px;
 }
 
-#menu-icon span:last-child{
+#menu-icon span:last-child {
   margin-bottom: 5px;
 }
 
@@ -171,7 +178,7 @@ a:hover {
 #logo a {
   color: #9e9e9e;
 }
-#logo a:hover{
+#logo a:hover {
   text-decoration: none;
 }
 #logo img {
@@ -191,17 +198,19 @@ a:hover {
   color: #9e9e9e;
 }
 /* Style general */
-input[type="text"], textarea{
+input[type="text"],
+textarea {
   border: none;
   border-bottom: 2px solid #e1e2db;
   width: 100%;
   outline: none;
   padding: 5px 0;
 }
-input[type="text"]:focus, textarea:focus{
+input[type="text"]:focus,
+textarea:focus {
   border-bottom: 2px solid #b9cb43;
 }
-textarea{
+textarea {
   max-width: 100%;
   min-width: 100%;
   min-height: 200px;

@@ -27,6 +27,11 @@ export default {
       console.log("videos contient des videos");
     }
   },
+  mounted: function() {
+    this.$router.app.$on("search-event", param => {
+      this.searchVideo(param);
+    });
+  },
   destroyed: function() {
     window.removeEventListener("scroll", this.handleScroll);
   },
@@ -40,8 +45,8 @@ export default {
       }
     },
     handleDelete: function(id) {
-      let i = this.videos.map(item => item._id).indexOf(id)
-      this.videos.splice(i, 1)
+      let i = this.videos.map(item => item._id).indexOf(id);
+      this.videos.splice(i, 1);
     },
     getVideos: function() {
       axios.get("http://localhost:8085/api/video/all").then(
@@ -53,6 +58,19 @@ export default {
           console.log(error);
         }
       );
+    },
+    searchVideo: function(val) {
+      axios
+        .get("http://localhost:8085/api/video/search?like="+val)
+        .then(
+          response => {
+            this.videos = response.data;
+            console.log(response.data);
+          },
+          error => {
+            console.log(error);
+          }
+        );
     }
   },
   components: {
