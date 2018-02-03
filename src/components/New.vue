@@ -57,7 +57,7 @@ export default {
                   desc: data.description,
                   legende: data.title,
                   poster: data.thumbnails.standard.url,
-                  votes: []
+                  vote: 0
                 };
                 this.$refs.desc.value = data.description;
                 this.$refs.legende.value = data.title;
@@ -83,7 +83,7 @@ export default {
         url: this.$refs.url.value,
         desc: this.$refs.desc.value,
         legende: this.$refs.legende.value,
-        votes: []
+        vote: 0
       };
       let videoValues = Object.values(video);
       let ok = true;

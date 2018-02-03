@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8085;
 const server = require('http').Server(app);
-var multer = require('multer');
 
 const mongoDBModule = require('./app_modules/crud-mongo');
 
@@ -11,7 +10,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(multer({dest:'./uploads/'}).single('singleInputFileName'));
 
 server.listen(port);
 
@@ -106,4 +104,15 @@ app.delete('/api/video', (req, res) => {
     })
 })
 
+app.post('/api/user/save', (req, res) => {
+    mongoDBModule.createUser(req, function (data) {
+        res.send(JSON.stringify(data))
+    })
+})
 
+// Ajouter le vote
+app.put('/api/add-vote', (req, res) => {
+    mongoDBModule.addVote(req, function (data) {
+        res.send(JSON.stringify(data))
+    })
+})

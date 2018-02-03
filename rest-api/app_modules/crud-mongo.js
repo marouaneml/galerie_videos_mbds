@@ -25,8 +25,7 @@ exports.findAllVideos = function (page, pagesize, callback) {
 
 		if (!err) {
 			db.collection('videos_mbds')
-				.find()
-				//.skip(page * pagesize)
+				.find({ "url": { $exists: true, $ne: null } })
 				.limit(pagesize)
 				.toArray()
 				.then(arr => callback(arr));
@@ -118,3 +117,84 @@ exports.deleteVideo = function (id, callback) {
 		}
 	});
 };
+
+
+exports.createUser = function (formData, callback) {
+	MongoClient.connect(url, function (err, db) {
+		if (!err) {
+			let toInsert = formData.body;
+			console.log("Insertion de l'utilisateur: " + toInsert);
+			db.collection("videos_mbds")
+				.insertOne(toInsert, function (err, result) {
+					if (!err) {
+						console.log("User inseré")
+						callback(result)
+					} else {
+						console.log(err)
+					}
+				});
+		} else {
+			let reponse = reponse = {
+				succes: false,
+				error: err,
+				msg: "Problème lors de l'insertion, erreur de connexion."
+			};
+			callback(reponse);
+		}
+	});
+}
+
+exports.addVote = function (formData, callback) {
+	MongoClient.connect(url, function (err, db) {
+		if (!err) {
+			let toPut = formData.body;
+			console.log(toPut);
+			// verifier l'existance du vote en question
+			db.collection("videos_mbds")
+				.findOne({ userId: toPut.user, votes: { $elemMatch: { video: toPut.vote.video } } }, function (err, data) {
+					if (err) throw err;
+					if (data != null) {
+						console.log("vote existe deja!")
+						callback({already: true})
+
+					}
+					else {
+						// ajouter le vote
+						db.collection("videos_mbds").update(
+							{ "userId": toPut.user },
+							{
+								"$push": {
+									"votes": toPut.vote
+								}
+							}, function (err, data) {
+								if (err) throw err;
+							}
+						);
+						db.collection("videos_mbds").update(
+							{ "_id": ObjectId(toPut.vote.video) },
+							{
+								"$set": {
+									"vote": toPut.vote.value
+								}
+							}
+							, function (err, data) {
+								if (err) throw err;
+
+								callback({already: false});
+
+							}
+						);
+					}
+					db.close();
+				});
+		} else {
+			let reponse = reponse = {
+				succes: false,
+				error: err,
+				msg: "Problème lors de l'insertion, erreur de connexion."
+			};
+			callback(reponse);
+		}
+	});
+}
+

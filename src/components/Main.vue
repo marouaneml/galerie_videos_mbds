@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <video-item @delete-evt="handleDelete(v._id)" v-for="v in videos.slice(0, this.count)" v-bind:key="v._id" :id="v._id" voteProp ="3" v-bind:thumb="v.poster" v-bind:title="v.legende" v-bind:desc="v.desc"></video-item>
+    <video-item @delete-evt="handleDelete(v._id)" v-for="v in videos.slice(0, this.count)" v-bind:key="v._id" :id="v._id" :voteProp ="v.vote" v-bind:thumb="v.poster" v-bind:title="v.legende" v-bind:desc="v.desc"></video-item>
     <p v-if="videos.length == 0">Pas de videos! Vérifiez le serveur nodeJs.</p>
   </div>
   
