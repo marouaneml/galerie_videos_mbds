@@ -6,8 +6,8 @@
       <div class="thumb">
         <img :src="thumb" :alt="title">
       </div>
-      <div class="title">{{title.slice(0, 50) +" ..."}}</div>
-      <p>{{desc.slice(0, 100) + " ..."}}</p>
+      <div class="title">{{title.slice(0, 25) +" ..."}}</div>
+      <p>{{desc.slice(0, 50) + " ..."}}</p>
       <hr>
       <div class="vote"><!--
         <span v-for="(i, index) in 5" v-bind:key="index" :class="{ checkbox: true, checked: checked, active: (this.vote>=6-i? true:false)}" @click.prevent="check(6-i)"></span>

@@ -39,9 +39,7 @@ export default {
   },
   methods: {
     search: function() {
-      if (this.searchInput.trim() != "") {
-        this.$router.app.$emit("search-event", this.searchInput);
-      }
+      this.$router.app.$emit("search-event", this.searchInput);
     }
   }
 };

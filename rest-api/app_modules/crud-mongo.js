@@ -22,13 +22,13 @@ exports.searchVideo = function (str, callback) {
 
 exports.findAllVideos = function (page, pagesize, callback) {
 	MongoClient.connect(url, function (err, db) {
-
+		
 		if (!err) {
 			db.collection('videos_mbds')
 				.find({ "url": { $exists: true, $ne: null } })
-				.limit(pagesize)
+				//.limit(pagesize)
 				.toArray()
-				.then(arr => callback(arr));
+				.then(arr => { console.log(arr); callback(arr) });
 		}
 		else {
 			callback(-1);
@@ -155,7 +155,7 @@ exports.addVote = function (formData, callback) {
 					if (err) throw err;
 					if (data != null) {
 						console.log("vote existe deja!")
-						callback({already: true})
+						callback({ already: true })
 
 					}
 					else {
@@ -180,7 +180,7 @@ exports.addVote = function (formData, callback) {
 							, function (err, data) {
 								if (err) throw err;
 
-								callback({already: false});
+								callback({ already: false });
 
 							}
 						);

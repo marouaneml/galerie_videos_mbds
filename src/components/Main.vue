@@ -29,7 +29,12 @@ export default {
   },
   mounted: function() {
     this.$router.app.$on("search-event", param => {
-      this.searchVideo(param);
+      if (param.trim() != "") {
+        this.searchVideo(param);
+      } else {
+        this.count = 9;
+        this.getVideos();
+      }
     });
   },
   destroyed: function() {
@@ -52,7 +57,6 @@ export default {
       axios.get("http://localhost:8085/api/video/all").then(
         response => {
           this.videos = response.data;
-          console.log(this.videos);
         },
         error => {
           console.log(error);
@@ -60,17 +64,14 @@ export default {
       );
     },
     searchVideo: function(val) {
-      axios
-        .get("http://localhost:8085/api/video/search?like="+val)
-        .then(
-          response => {
-            this.videos = response.data;
-            console.log(response.data);
-          },
-          error => {
-            console.log(error);
-          }
-        );
+      axios.get("http://localhost:8085/api/video/search?like=" + val).then(
+        response => {
+          this.videos = response.data;
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   },
   components: {
